@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Smart Anniversary Collage Mobile</title>
+<title>Smart Anniversary Collage A4</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.cdnfonts.com/css/blackjack" rel="stylesheet">
@@ -18,7 +18,7 @@ color:#fff;
 display:flex;
 flex-direction:column;
 align-items:center;
-overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+overflow-x: hidden;
 padding-bottom: 50px;
 }
 
@@ -32,16 +32,17 @@ width: 100%;
 box-sizing: border-box;
 }
 
-/* CONTROLS - Mobile Friendly */
+/* CONTROLS */
 .controls{
 width:360px;
-max-width: 100%; /* Fit mobile screen */
+max-width: 100%;
 background:#1a1a1a;
 padding:20px;
 border-radius:12px;
 box-shadow:0 0 20px rgba(0,0,0,0.6);
 box-sizing: border-box;
-order: 2; /* On mobile, controls below canvas (optional, currently logic keeps side by side or wrap) */
+order: 2; 
+z-index: 100;
 }
 
 @media (max-width: 850px) {
@@ -54,13 +55,11 @@ order: 2; /* On mobile, controls below canvas (optional, currently logic keeps s
         width: 100%;
         order: 2;
     }
-    /* Canvas Wrapper for scaling */
     #canvas-wrapper {
         order: 1;
         width: 100%;
         display: flex;
         justify-content: center;
-        overflow: hidden;
         margin-bottom: 20px;
     }
 }
@@ -88,21 +87,22 @@ margin-bottom: 5px;
 font-size: 1rem;
 }
 
-/* CANVAS CONTAINER (To handle scaling on mobile) */
+/* CANVAS WRAPPER */
 #canvas-wrapper {
     position: relative;
-    /* Height will be set via JS */
+    transform-origin: top center;
+    /* Height/Width controlled by JS for scaling */
 }
 
-/* ACTUAL CANVAS */
+/* ACTUAL CANVAS - Fixed A4 Ratio Logic */
 #canvas{
 width:800px;
 height:1130px;
 background:#000;
 position:relative;
 overflow:hidden;
-transform-origin: top center; /* Important for scaling */
 box-shadow: 0 0 20px rgba(0,0,0,0.5);
+/* Transform will be applied by JS for display only */
 }
 
 #bg-image{
@@ -115,7 +115,7 @@ z-index:0;
 pointer-events: none;
 }
 
-/* DATE */
+/* TEXT LAYERS - Fixed sizes to prevent mobile shifting */
 #overlay-date-container{
 position:absolute;
 top:10%;
@@ -134,7 +134,6 @@ line-height:0.8;
 text-shadow:3px 3px 6px rgba(0,0,0,0.8);
 }
 
-/* PARAGRAPH */
 #overlay-para{
 position:absolute;
 top:29%;
@@ -148,7 +147,6 @@ z-index:6;
 pointer-events: none;
 }
 
-/* NAMES */
 #overlay-names{
 position:absolute;
 bottom:1%;
@@ -162,7 +160,7 @@ z-index:6;
 pointer-events: none;
 }
 
-/* AREA 1 */
+/* PHOTO GRIDS */
 #area1{
 position:absolute;
 top:15%;
@@ -174,7 +172,6 @@ border-radius:10px;
 z-index:4;
 }
 
-/* AREA 2 */
 #area2{
 position:absolute;
 top:39%;
@@ -187,7 +184,7 @@ z-index:4;
 grid-auto-rows:1fr;
 }
 
-/* PHOTO CONTAINER */
+/* PHOTO STYLING */
 .photo{
 position:relative;
 overflow:hidden;
@@ -196,10 +193,9 @@ cursor:pointer;
 width: 100%;
 height: 100%;
 background: #222;
--webkit-tap-highlight-color: transparent; /* Remove blue highlight on tap */
+-webkit-tap-highlight-color: transparent;
 }
 
-/* INNER DIV */
 .inner{
 position:absolute;
 top:0;
@@ -209,7 +205,6 @@ width: 100%;
 height: 100%;
 }
 
-/* IMAGE */
 .inner img{
 display:block;
 max-width:none; 
@@ -222,7 +217,7 @@ left: 0;
 outline:4px solid red;
 }
 
-/* --- ADVANCED CROP MODAL STYLES --- */
+/* CROP MODAL */
 #cropModal{
 position:fixed;
 inset:0;
@@ -242,7 +237,7 @@ border-radius:12px;
 text-align: center;
 border: 1px solid #333;
 width: 100%;
-max-width: 400px; /* Limit width on tablets */
+max-width: 400px;
 box-sizing: border-box;
 }
 
@@ -253,7 +248,7 @@ background:#000;
 margin: 0 auto;
 border: 2px solid #555;
 cursor: grab;
-touch-action: none; /* Crucial for touch dragging */
+touch-action: none;
 }
 
 .crop-box:active {
@@ -277,7 +272,6 @@ top: 0;
 left: 0;
 }
 
-/* Zoom Controls for Mobile */
 .zoom-controls {
     display: flex;
     justify-content: center;
@@ -313,7 +307,6 @@ padding: 10px;
 margin: 0;
 }
 
-/* Mobile Hint Text */
 .mobile-hint {
     display: none;
     font-size: 0.8rem;
@@ -347,7 +340,7 @@ margin: 0;
         <div id="area1"></div>
         <div id="overlay-para"></div>
         <div id="area2"></div>
-        <div id="overlay-names">Daivik❣️Radhika</div>
+        <div id="overlay-names">Daivik ❤️ Radhika</div>
     </div>
 </div>
 
@@ -383,7 +376,7 @@ Today 💖 marks the beginning of  your years 💗 together 👩‍❤️‍�
 <input type="range" min="2" max="6" step="0.1" value="3.8"
 oninput="document.getElementById('overlay-names').style.fontSize=this.value+'rem'">
 
-<button onclick="downloadImage()">Download HD</button>
+<button onclick="downloadImage()">Download A4 HD</button>
 
 </div>
 
@@ -397,12 +390,10 @@ oninput="document.getElementById('overlay-names').style.fontSize=this.value+'rem
 <img id="cropImg">
 </div>
 </div>
-
 <div class="zoom-controls">
     <button class="zoom-btn" onclick="zoomOut()">-</button>
     <button class="zoom-btn" onclick="zoomIn()">+</button>
 </div>
-
 <div class="crop-controls">
 <button onclick="applyCrop()" style="background:#28a745;">Apply</button>
 <button onclick="closeCrop()" style="background:#555;">Cancel</button>
@@ -431,27 +422,30 @@ let cropState = {x:0, y:0, scale:1};
 let selected=null;
 let draggedItem=null;
 
-/* --- RESPONSIVE SCALING LOGIC --- */
+/* --- RESPONSIVE SCALING (DISPLAY ONLY) --- */
 function scaleCanvas() {
     const screenWidth = window.innerWidth;
-    const padding = 40; 
-    const targetWidth = 800;
+    const padding = 20; 
+    const targetWidth = 800; // Original Canvas Width
     
-    // Only scale if screen is smaller than canvas
+    // Only shrink for display, not for structure
     if (screenWidth < targetWidth + padding) {
         const scale = (screenWidth - padding) / targetWidth;
         canvas.style.transform = `scale(${scale})`;
-        // Adjust height of wrapper so controls don't overlap
+        canvas.style.transformOrigin = "top center";
+        // Adjust wrapper height so content below flows correctly
         canvasWrapper.style.height = `${1130 * scale}px`;
-        canvasWrapper.style.width = `${800 * scale}px`; // Center align hack
+        canvasWrapper.style.width = "100%";
+        canvasWrapper.style.display = "flex";
+        canvasWrapper.style.justifyContent = "center";
     } else {
         canvas.style.transform = "none";
         canvasWrapper.style.height = "auto";
         canvasWrapper.style.width = "auto";
+        canvasWrapper.style.display = "block";
     }
 }
 window.addEventListener("resize", scaleCanvas);
-// Call initially
 scaleCanvas();
 
 /* TEMPLATE */
@@ -471,7 +465,7 @@ const scale = parseFloat(el.dataset.scale) || 1;
 el.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
 }
 
-/* REORDER & DRAG LOGIC (Desktop) */
+/* REORDER & DRAG LOGIC */
 function enableReorder(div){
 div.setAttribute("draggable","true");
 div.addEventListener("dragstart",()=>{ draggedItem = div; });
@@ -484,27 +478,17 @@ div.parentNode.insertBefore(draggedItem, div);
 });
 }
 
-/* --- ADVANCED CROP LOGIC (MOBILE OPTIMIZED) --- */
+/* --- CROP LOGIC --- */
 function openCrop(inner, div){
 currentInner = inner;
-
-// 1. Match Box Size EXACTLY
 cropBox.style.width = div.clientWidth + "px";
 cropBox.style.height = div.clientHeight + "px";
-
-// 2. Set Image Source
 cropImg.src = inner.querySelector("img").src;
-
-// 3. Get Current Transform State
 cropState.x = parseFloat(inner.dataset.x) || 0;
 cropState.y = parseFloat(inner.dataset.y) || 0;
 cropState.scale = parseFloat(inner.dataset.scale) || 1;
-
-// 4. Update View immediately
 updateCropView();
 cropModal.style.display = "flex";
-
-// 5. Setup Mouse & TOUCH Events for Panning
 setupCropInteraction();
 }
 
@@ -512,20 +496,30 @@ function updateCropView(){
 cropInner.style.transform = `translate(${cropState.x}px, ${cropState.y}px) scale(${cropState.scale})`;
 }
 
-// Zoom Helper Functions (For Mobile Buttons)
-function zoomIn() {
-    cropState.scale += 0.1;
-    updateCropView();
-}
-function zoomOut() {
-    cropState.scale = Math.max(0.1, cropState.scale - 0.1);
-    updateCropView();
-}
+function zoomIn() { cropState.scale += 0.1; updateCropView(); }
+function zoomOut() { cropState.scale = Math.max(0.1, cropState.scale - 0.1); updateCropView(); }
 
 function setupCropInteraction() {
     let startX, startY, isDragging = false;
 
-    // --- MOUSE EVENTS ---
+    // Touch
+    cropBox.ontouchstart = e => {
+        isDragging = true;
+        const touch = e.touches[0];
+        startX = touch.clientX - cropState.x;
+        startY = touch.clientY - cropState.y;
+    };
+    cropBox.ontouchmove = e => {
+        if(!isDragging) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        cropState.x = touch.clientX - startX;
+        cropState.y = touch.clientY - startY;
+        updateCropView();
+    };
+    cropBox.ontouchend = () => { isDragging = false; };
+
+    // Mouse
     cropBox.onmousedown = e => {
         e.preventDefault();
         isDragging = true;
@@ -540,44 +534,10 @@ function setupCropInteraction() {
         updateCropView();
     };
     document.onmouseup = () => { isDragging = false; };
-
-    // --- TOUCH EVENTS (FOR MOBILE) ---
-    cropBox.ontouchstart = e => {
-        // e.preventDefault(); // allow scrolling if needed, but here we capture
-        isDragging = true;
-        const touch = e.touches[0];
-        startX = touch.clientX - cropState.x;
-        startY = touch.clientY - cropState.y;
-    };
-    
-    cropBox.ontouchmove = e => {
-        if(!isDragging) return;
-        e.preventDefault(); // Stop screen from scrolling while panning image
-        const touch = e.touches[0];
-        cropState.x = touch.clientX - startX;
-        cropState.y = touch.clientY - startY;
-        updateCropView();
-    };
-
-    cropBox.ontouchend = () => { isDragging = false; };
-
-    // --- WHEEL ZOOM (Desktop) ---
-    cropBox.onwheel = e => {
-        e.preventDefault();
-        const zoomSpeed = 0.05; 
-        if(e.deltaY < 0) {
-            cropState.scale += zoomSpeed;
-        } else {
-            cropState.scale -= zoomSpeed;
-        }
-        cropState.scale = Math.max(0.1, cropState.scale);
-        updateCropView();
-    };
 }
 
 function applyCrop(){
 if(currentInner){
-// Save state back to the original element
 currentInner.dataset.x = cropState.x;
 currentInner.dataset.y = cropState.y;
 currentInner.dataset.scale = cropState.scale;
@@ -594,7 +554,7 @@ cropBox.ontouchstart = null;
 cropBox.ontouchmove = null;
 }
 
-/* MAIN PHOTO LOADING LOGIC */
+/* MAIN PHOTO LOADING */
 photoInput.addEventListener("change",e=>{
 area1.innerHTML="";
 area2.innerHTML="";
@@ -604,137 +564,86 @@ if(files.length<1) return;
 files.forEach((file,index)=>{
 const reader=new FileReader();
 reader.onload=ev=>{
-
 const div=document.createElement("div");
 div.className="photo";
-
 const inner=document.createElement("div");
 inner.className="inner";
-// Init default values
-inner.dataset.x = 0;
-inner.dataset.y = 0;
-inner.dataset.scale = 1;
-
+inner.dataset.x = 0; inner.dataset.y = 0; inner.dataset.scale = 1;
 const img=document.createElement("img");
 img.src=ev.target.result;
-
 inner.appendChild(img);
 div.appendChild(inner);
 
-// AUTO FIT LOGIC
 img.onload = function(){
 const boxW = div.clientWidth;
 const boxH = div.clientHeight;
 const imgW = img.naturalWidth;
 const imgH = img.naturalHeight;
-
 if(!boxW || !boxH || !imgW || !imgH) return;
-
 const scale = Math.max(boxW/imgW, boxH/imgH);
-
 inner.dataset.scale = scale;
-// Center the image
 inner.dataset.x = (boxW - imgW*scale)/2;
 inner.dataset.y = (boxH - imgH*scale)/2;
-
 applyTransform(inner);
 };
 
 enableReorder(div);
 
-/* CLICK TO SWAP LOGIC */
 div.onclick=()=>{
 if(!selected){
-selected=div;
-div.classList.add("selected");
-}
-else if(selected === div){
-    // Deselect if clicked again
-    selected.classList.remove("selected");
-    selected = null;
-}
-else{
-// Swap Logic
+selected=div; div.classList.add("selected");
+} else if(selected === div){
+selected.classList.remove("selected"); selected = null;
+} else{
 const selInner = selected.querySelector(".inner");
 const targetInner = div.querySelector(".inner");
 const tempSrc = selInner.querySelector("img").src;
-const tempX = selInner.dataset.x;
-const tempY = selInner.dataset.y;
-const tempScale = selInner.dataset.scale;
+const tempX = selInner.dataset.x; const tempY = selInner.dataset.y; const tempScale = selInner.dataset.scale;
 
 selInner.querySelector("img").src = targetInner.querySelector("img").src;
-selInner.dataset.x = targetInner.dataset.x;
-selInner.dataset.y = targetInner.dataset.y;
-selInner.dataset.scale = targetInner.dataset.scale;
+selInner.dataset.x = targetInner.dataset.x; selInner.dataset.y = targetInner.dataset.y; selInner.dataset.scale = targetInner.dataset.scale;
 applyTransform(selInner);
 
 targetInner.querySelector("img").src = tempSrc;
-targetInner.dataset.x = tempX;
-targetInner.dataset.y = tempY;
-targetInner.dataset.scale = tempScale;
+targetInner.dataset.x = tempX; targetInner.dataset.y = tempY; targetInner.dataset.scale = tempScale;
 applyTransform(targetInner);
 
-selected.classList.remove("selected");
-selected=null;
+selected.classList.remove("selected"); selected=null;
 }
 };
 
-/* DOUBLE CLICK TO CROP (Works as Double Tap on mobile) */
 let lastTap = 0;
 div.addEventListener('touchend', function(e) {
     const currentTime = new Date().getTime();
     const tapLength = currentTime - lastTap;
     if (tapLength < 300 && tapLength > 0) {
-        e.preventDefault();
-        openCrop(inner, div);
+        e.preventDefault(); openCrop(inner, div);
     }
     lastTap = currentTime;
 });
-
-div.ondblclick = (e) => {
-e.stopPropagation(); 
-openCrop(inner, div);
-};
+div.ondblclick = (e) => { e.stopPropagation(); openCrop(inner, div); };
 
 if(index===0) area1.appendChild(div);
 else area2.appendChild(div);
 };
 reader.readAsDataURL(file);
 });
-setTimeout(()=>{
-    applyLayout(files.length-1);
-    // Recalculate layout size for scaling logic
-    scaleCanvas();
-}, 200);
+setTimeout(()=>{ applyLayout(files.length-1); scaleCanvas(); }, 200);
 });
 
-/* LAYOUT ENGINE */
 function applyLayout(count){
 area2.style.gridTemplateColumns="";
-[...area2.children].forEach(el=>{
-el.style.gridRow="";
-el.style.gridColumn="";
-});
+[...area2.children].forEach(el=>{ el.style.gridRow=""; el.style.gridColumn=""; });
 if(count==1) area2.style.gridTemplateColumns="1fr";
 else if(count==2) area2.style.gridTemplateColumns="repeat(2,1fr)";
-else if(count==3){
-area2.style.gridTemplateColumns="2fr 1fr";
-area2.children[0].style.gridRow="span 2";
-}
+else if(count==3){ area2.style.gridTemplateColumns="2fr 1fr"; area2.children[0].style.gridRow="span 2"; }
 else if(count==4) area2.style.gridTemplateColumns="repeat(2,1fr)";
-else if(count==5){
-area2.style.gridTemplateColumns="repeat(2,1fr)";
-area2.children[4].style.gridColumn="span 2";
-}
+else if(count==5){ area2.style.gridTemplateColumns="repeat(2,1fr)"; area2.children[4].style.gridColumn="span 2"; }
 else if(count==6) area2.style.gridTemplateColumns="repeat(3,1fr)";
-else if(count==7){
-area2.style.gridTemplateColumns="repeat(3,1fr)";
-area2.children[6].style.gridColumn="span 3";
-}
+else if(count==7){ area2.style.gridTemplateColumns="repeat(3,1fr)"; area2.children[6].style.gridColumn="span 3"; }
 else area2.style.gridTemplateColumns="repeat(4,1fr)";
 }
 
-/* DATE & TEXT */
 function updateDateSize(val){
 document.getElementById("overlay-date").style.fontSize=val+"rem";
 document.getElementById("overlay-year").style.fontSize=val+"rem";
@@ -746,38 +655,48 @@ const paraOverlay=document.getElementById("overlay-para");
 paraOverlay.innerText=paraInput.value;
 paraInput.addEventListener("input",()=>paraOverlay.innerText=paraInput.value);
 function updateNames(){
-document.getElementById("overlay-names").innerHTML=
-document.getElementById("input-name1").value+"❣️"+
-document.getElementById("input-name2").value;
+document.getElementById("overlay-names").innerHTML=document.getElementById("input-name1").value+" ❤️ "+document.getElementById("input-name2").value;
 }
 document.getElementById("input-name1").oninput=updateNames;
 document.getElementById("input-name2").oninput=updateNames;
 
-/* DOWNLOAD - Reset Scale for Clean Capture */
+/* --- PERFECT A4 DOWNLOAD LOGIC --- */
 function downloadImage(){
-    // Temporarily remove scale to ensure full HD capture
-    const currentTransform = canvas.style.transform;
-    canvas.style.transform = "none";
-    window.scrollTo(0,0);
+    // 1. SAVE CURRENT STATE
+    const originalTransform = canvas.style.transform;
+    const originalScroll = window.scrollY;
 
+    // 2. RESET VIEWPORT FOR CAPTURE (Fixes Shrinking/Overlapping)
+    canvas.style.transform = "none"; 
+    window.scrollTo(0,0); // Force top
+
+    // 3. CAPTURE WITH DESKTOP SETTINGS
     html2canvas(document.getElementById("canvas"),{
-        scale:2,
-        useCORS:true,
+        scale: 3, // High Resolution (A4 Print Quality)
+        useCORS: true,
+        allowTaint: true,
         backgroundColor:"#000",
-        width:800,
-        height:1130,
-        scrollY: 0,
+        width: 800,   // Force Desktop Width
+        height: 1130, // Force Desktop Height
+        windowWidth: 1280, // Fake Desktop Viewport
+        windowHeight: 1400,
+        x: 0,
+        y: 0,
+        scrollY: 0
     }).then(canvasEl=>{
+        // 4. RESTORE STATE
+        canvas.style.transform = originalTransform;
+        window.scrollTo(0, originalScroll);
+
+        // 5. DOWNLOAD
         const link=document.createElement("a");
-        link.download="anniversary_collage.jpg";
-        link.href=canvasEl.toDataURL("image/jpeg", 0.9);
+        link.download="A4_Anniversary_Collage.jpg";
+        link.href=canvasEl.toDataURL("image/jpeg", 0.95);
         link.click();
-        
-        // Restore scale for UI
-        canvas.style.transform = currentTransform;
     }).catch(err => {
-        console.error(err);
-        canvas.style.transform = currentTransform;
+        console.error("Download Error:", err);
+        // Ensure we restore state even if error
+        canvas.style.transform = originalTransform;
     });
 }
 
