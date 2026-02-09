@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Smart Anniversary Collage Ultimate</title>
+<title>Smart Anniversary Collage Final</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.cdnfonts.com/css/blackjack" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-/* GLOBAL STYLES */
+/* GLOBAL & MOBILE BASICS */
 body{
     margin:0;
     font-family:Poppins;
@@ -19,67 +19,51 @@ body{
     display:flex;
     flex-direction:column;
     align-items:center;
-    overflow-x: hidden; /* Prevent horizontal scroll */
-    padding-bottom: 80px; /* Space for scrolling */
+    overflow-x: hidden;
+    padding-bottom: 80px;
 }
 
-h2 {
-    text-align: center;
-    margin: 15px 0 5px 0;
-    font-size: 1.5rem;
-}
-
-.mobile-hint {
-    font-size: 0.8rem;
-    color: #aaa;
-    margin-bottom: 15px;
-    text-align: center;
-    background: #222;
-    padding: 5px 15px;
-    border-radius: 20px;
-}
-
-/* APP CONTAINER */
 .app{
     display:flex;
-    flex-direction: column; /* Stack vertically on mobile */
+    flex-direction: column;
     align-items: center;
     gap:20px;
     width: 100%;
     box-sizing: border-box;
+    padding: 20px;
 }
 
-/* --- CANVAS WRAPPER (The Fix for Squishing) --- */
+/* --- CANVAS WRAPPER (This makes it work on Mobile) --- */
 #canvas-wrapper-outer {
     width: 100%;
     display: flex;
     justify-content: center;
-    overflow: hidden; /* Hide parts that stick out before scaling */
+    overflow: hidden; 
     position: relative;
-    /* Height will be set by JS */
+    /* Height is set by JS */
 }
 
-/* THE CANVAS */
+/* --- CANVAS (TUMHARI EXACT CSS) --- */
 #canvas{
-    /* FORCE FIXED DIMENSIONS - DO NOT CHANGE */
-    width: 800px;
-    height: 1130px;
-    min-width: 800px;  /* Critical Fix: Prevents squishing */
+    width:800px;
+    height:1130px;
+    /* Important Fix for Mobile: Force Minimum Width */
+    min-width: 800px;
     min-height: 1130px;
     
     background:#000;
     position:relative;
     overflow:hidden;
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    flex-shrink: 0; /* Critical Fix: Prevents Flexbox from shrinking it */
-    transform-origin: top center; /* Scale from top center */
+    transform-origin: top center;
 }
 
-/* LAYERS INSIDE CANVAS */
+/* --- TEMPLATE & LAYOUT (TUMHARA EXACT CODE) --- */
 #bg-image{
     position:absolute; inset:0; width:100%; height:100%; object-fit:contain; z-index:0; pointer-events: none;
 }
 
+/* DATE */
 #overlay-date-container{
     position:absolute; top:10%; left:10%; width:22%; text-align:center; z-index:5; pointer-events: none;
 }
@@ -87,23 +71,60 @@ h2 {
     font-family:'BlackJack',cursive; color:#fff; line-height:0.8; text-shadow:3px 3px 6px rgba(0,0,0,0.8);
 }
 
+/* PARAGRAPH (Tumhari Settings: Top 29%, Left 2%, Width 36%) */
 #overlay-para{
-    position:absolute; top:29%; left:2%; width:36%; 
-    font-family:'Dancing Script',cursive; font-size:1.5rem; line-height:1.6; white-space:pre-wrap; 
-    z-index:6; pointer-events: none;
+    position:absolute;
+    top:29%;
+    left:2%;
+    width:36%;
+    font-family:'Dancing Script',cursive;
+    font-size:1.5rem;
+    line-height:1.6;
+    white-space:pre-wrap;
+    z-index:6;
+    pointer-events: none;
 }
 
+/* NAMES (Tumhari Settings: Bottom 1%, Left 32%) */
 #overlay-names{
-    position:absolute; bottom:1%; left:32%; right:2%; text-align:center; 
-    font-family:'Dancing Script',cursive; font-size:3.8rem; white-space:nowrap; 
-    z-index:6; pointer-events: none;
+    position:absolute;
+    bottom:1%;
+    left:32%;
+    right:2%;
+    text-align:center;
+    font-family:'Dancing Script',cursive;
+    font-size:3.8rem;
+    white-space:nowrap;
+    z-index:6;
+    pointer-events: none;
 }
 
-/* GRIDS */
-#area1{ position:absolute; top:15%; right:27%; width:33%; height:23%; overflow:hidden; border-radius:10px; z-index:4; }
-#area2{ position:absolute; top:39%; bottom:10%; right:2%; width:58%; display:grid; gap:10px; z-index:4; grid-auto-rows:1fr; }
+/* AREA 1 (Tumhari Settings) */
+#area1{
+    position:absolute;
+    top:15%;
+    right:27%;
+    width:33%;
+    height:23%;
+    overflow:hidden;
+    border-radius:10px;
+    z-index:4;
+}
 
-/* PHOTO ITEMS */
+/* AREA 2 (Tumhari Settings: Width 58%, Bottom 10%) */
+#area2{
+    position:absolute;
+    top:39%;
+    bottom:10%;
+    right:2%;
+    width:58%;
+    display:grid;
+    gap:10px;
+    z-index:4;
+    grid-auto-rows:1fr;
+}
+
+/* PHOTO STYLING */
 .photo{
     position:relative; overflow:hidden; border-radius:12px; cursor:pointer; 
     width: 100%; height: 100%; background: #222; 
@@ -113,7 +134,7 @@ h2 {
 .inner img{ display:block; max-width:none; position: absolute; top: 0; left: 0; }
 .photo.selected{ outline:4px solid red; }
 
-/* CONTROLS SECTION */
+/* CONTROLS (Mobile Friendly) */
 .controls{
     width: 100%;
     max-width: 400px;
@@ -136,7 +157,7 @@ button{
     margin-bottom: 5px; font-size: 1.1rem; color: #000;
 }
 
-/* CROP MODAL */
+/* CROP MODAL (Updated for Touch) */
 #cropModal{
     position:fixed; inset:0; background:rgba(0,0,0,0.95); display:none;
     flex-direction: column; justify-content:center; align-items:center; z-index:9999; padding: 20px;
@@ -164,7 +185,7 @@ button{
 <body>
 
 <h2>Smart Anniversary Collage</h2>
-<div class="mobile-hint">Tap to Select • Tap another to Swap • Double Tap to Crop</div>
+<div style="font-size:0.8rem; color:#888; margin-bottom:10px;">Mobile: Double Tap to Edit Photo</div>
 
 <div class="app">
 
@@ -180,18 +201,18 @@ button{
             <div id="area1"></div>
             <div id="overlay-para"></div>
             <div id="area2"></div>
-            <div id="overlay-names">Daivik ❤️ Radhika</div>
+            <div id="overlay-names">Daivik❣️Radhika</div>
         </div>
     </div>
 
     <div class="controls">
         <button onclick="downloadImage()">Download A4 HD ⬇️</button>
-        <hr style="border-color:#333; margin-bottom:15px;">
+        <hr style="border-color:#333; margin: 15px 0;">
 
         <label>Upload Template</label>
         <input type="file" id="bg-input" accept="image/*">
 
-        <label>Upload Photos (Select Multiple)</label>
+        <label>Upload Photos</label>
         <input type="file" id="photo-input" multiple accept="image/*">
 
         <label>Date</label>
@@ -205,8 +226,8 @@ button{
         oninput="updateDateSize(this.value)">
 
         <label>Paragraph</label>
-        <textarea id="input-msg" rows="4">Happy Anniversary 💖 
-Today 💖 marks the beginning 💕 of your years 💗 together 👩‍❤️‍👨✨. May your bond 💞 continue to grow stronger 💝 with each passing year 🌟🕊️. Here’s a small gift 🎁 to celebrate 🎉 the big Love 💕 you share 💫 may it bring a little extra joy 💓 to your special day! 🥂💐✨</textarea>
+        <textarea id="input-msg" rows="5">         Happy Anniversary 
+Today 💖 marks the beginning of your years 💗 together👩‍❤️‍👨✨ . May your bond 💞 continue to grow stronger with each passing year 🕊️. Here’s a small gift 🎁 to celebrate 🎉 the big Love 💕 you share 💫 may it bring a little extra joy to your special day!🥂✨ Cheers to many more years of laughter, love, and unforgettable memories together 🎊❤️</textarea>
 
         <label>Name 1</label>
         <input type="text" id="input-name1" value="Daivik">
@@ -250,7 +271,6 @@ const area2=document.getElementById("area2");
 const canvas = document.getElementById("canvas");
 const wrapperOuter = document.getElementById("canvas-wrapper-outer");
 
-// --- CROP ELEMENTS ---
 const cropModal = document.getElementById("cropModal");
 const cropBox = document.getElementById("cropBox");
 const cropInner = document.getElementById("cropInner");
@@ -259,41 +279,28 @@ let currentInner = null;
 let cropState = {x:0, y:0, scale:1};
 
 let selected=null;
-let draggedItem=null;
 
-/* --- RESPONSIVE SCALING ENGINE (THE FIX) --- */
+/* --- MOBILE RESPONSIVE ENGINE (Important) --- */
 function responsiveScale() {
     const screenWidth = window.innerWidth;
-    const canvasWidth = 800; // Fixed internal width
-    const canvasHeight = 1130; // Fixed internal height
-    const padding = 20; // Margin from edges
+    const canvasWidth = 800; 
+    const canvasHeight = 1130;
+    const padding = 20;
 
-    // If screen is smaller than 800px (Mobile/Tablet)
     if (screenWidth < canvasWidth + padding) {
         const scaleFactor = (screenWidth - padding) / canvasWidth;
-        
-        // Scale the canvas
         canvas.style.transform = `scale(${scaleFactor})`;
-        
-        // Adjust the container height so content flows correctly below it
-        // (Height * Scale) gives the visual height
         wrapperOuter.style.height = `${canvasHeight * scaleFactor}px`;
-        wrapperOuter.style.width = "100%";
     } else {
-        // Desktop
         canvas.style.transform = "none";
         wrapperOuter.style.height = "auto";
-        wrapperOuter.style.width = "auto";
     }
 }
-// Listen to resize and load
 window.addEventListener("resize", responsiveScale);
 window.addEventListener("load", responsiveScale);
-// Trigger immediately
 responsiveScale();
 
-
-/* --- TEMPLATE UPLOAD --- */
+/* --- TEMPLATE --- */
 bgInput.addEventListener("change",e=>{
     const file=e.target.files[0];
     if(!file) return;
@@ -302,7 +309,7 @@ bgInput.addEventListener("change",e=>{
     reader.readAsDataURL(file);
 });
 
-/* --- PHOTO LOGIC --- */
+/* --- PHOTO LOGIC (Tumhara Style) --- */
 function applyTransform(el){
     const x = parseFloat(el.dataset.x) || 0;
     const y = parseFloat(el.dataset.y) || 0;
@@ -323,7 +330,6 @@ photoInput.addEventListener("change",e=>{
             div.className="photo";
             const inner=document.createElement("div");
             inner.className="inner";
-            // Default Values
             inner.dataset.x = 0; inner.dataset.y = 0; inner.dataset.scale = 1;
             
             const img=document.createElement("img");
@@ -331,7 +337,6 @@ photoInput.addEventListener("change",e=>{
             inner.appendChild(img);
             div.appendChild(inner);
 
-            // Auto Fit Logic
             img.onload = function(){
                 const boxW = div.clientWidth;
                 const boxH = div.clientHeight;
@@ -339,7 +344,7 @@ photoInput.addEventListener("change",e=>{
                 const imgH = img.naturalHeight;
                 if(!boxW || !boxH || !imgW || !imgH) return;
                 
-                // Math.max for Cover effect
+                // AUTO FIT
                 const scale = Math.max(boxW/imgW, boxH/imgH);
                 inner.dataset.scale = scale;
                 inner.dataset.x = (boxW - imgW*scale)/2;
@@ -347,10 +352,9 @@ photoInput.addEventListener("change",e=>{
                 applyTransform(inner);
             };
 
-            // Interactions
             div.onclick = () => handlePhotoClick(div);
             
-            // Double Tap / Double Click logic
+            // Double Tap for Mobile
             let lastTap = 0;
             div.addEventListener('touchend', function(e) {
                 const currentTime = new Date().getTime();
@@ -368,37 +372,32 @@ photoInput.addEventListener("change",e=>{
         reader.readAsDataURL(file);
     });
     
-    // Slight delay to allow DOM to render before layout calc
     setTimeout(()=>{ 
         applyLayout(files.length-1); 
-        responsiveScale(); // Re-check scale after layout change
+        responsiveScale();
     }, 200);
 });
 
-/* --- SELECTION & SWAP --- */
+/* --- SWAP LOGIC --- */
 function handlePhotoClick(div){
     if(!selected){
         selected=div; div.classList.add("selected");
     } else if(selected === div){
         selected.classList.remove("selected"); selected = null;
     } else {
-        // Swap
         const selInner = selected.querySelector(".inner");
         const targetInner = div.querySelector(".inner");
         
-        // Swap Src
         const tempSrc = selInner.querySelector("img").src;
         selInner.querySelector("img").src = targetInner.querySelector("img").src;
         targetInner.querySelector("img").src = tempSrc;
 
-        // Swap Data Attributes (Transform state)
         const swapData = (a, b) => {
             const tempX = a.dataset.x; const tempY = a.dataset.y; const tempScale = a.dataset.scale;
             a.dataset.x = b.dataset.x; a.dataset.y = b.dataset.y; a.dataset.scale = b.dataset.scale;
             b.dataset.x = tempX; b.dataset.y = tempY; b.dataset.scale = tempScale;
         };
         swapData(selInner, targetInner);
-
         applyTransform(selInner);
         applyTransform(targetInner);
 
@@ -406,7 +405,7 @@ function handlePhotoClick(div){
     }
 }
 
-/* --- LAYOUT GRID --- */
+/* --- GRID LAYOUT (Tumhara Exact Logic) --- */
 function applyLayout(count){
     area2.style.gridTemplateColumns="";
     [...area2.children].forEach(el=>{ el.style.gridRow=""; el.style.gridColumn=""; });
@@ -433,15 +432,14 @@ const paraOverlay=document.getElementById("overlay-para");
 paraOverlay.innerText=paraInput.value;
 paraInput.addEventListener("input",()=>paraOverlay.innerText=paraInput.value);
 function updateNames(){
-    document.getElementById("overlay-names").innerHTML=document.getElementById("input-name1").value+" ❤️ "+document.getElementById("input-name2").value;
+    document.getElementById("overlay-names").innerHTML=document.getElementById("input-name1").value+"❣️"+document.getElementById("input-name2").value;
 }
 document.getElementById("input-name1").oninput=updateNames;
 document.getElementById("input-name2").oninput=updateNames;
 
-/* --- CROP MODAL LOGIC --- */
+/* --- CROP MODAL (With Touch) --- */
 function openCrop(inner, div){
     currentInner = inner;
-    // Set box to pixel dimensions of the photo container
     cropBox.style.width = div.clientWidth + "px";
     cropBox.style.height = div.clientHeight + "px";
     cropImg.src = inner.querySelector("img").src;
@@ -457,7 +455,7 @@ function openCrop(inner, div){
 function updateCropView(){
     cropInner.style.transform = `translate(${cropState.x}px, ${cropState.y}px) scale(${cropState.scale})`;
 }
-function zoomIn() { cropState.scale += 0.1; updateCropView(); }
+function zoomIn() { cropState.scale += 0.05; updateCropView(); }
 function zoomOut() { cropState.scale = Math.max(0.1, cropState.scale - 0.1); updateCropView(); }
 
 function setupCropInteraction() {
@@ -475,12 +473,10 @@ function setupCropInteraction() {
         updateCropView();
     };
 
-    // Touch
     cropBox.ontouchstart = e => handleStart(e.touches[0].clientX, e.touches[0].clientY);
     cropBox.ontouchmove = e => { e.preventDefault(); handleMove(e.touches[0].clientX, e.touches[0].clientY); };
     cropBox.ontouchend = () => { isDragging = false; };
     
-    // Mouse
     cropBox.onmousedown = e => { e.preventDefault(); handleStart(e.clientX, e.clientY); };
     document.onmousemove = e => { if(isDragging) { e.preventDefault(); handleMove(e.clientX, e.clientY); } };
     document.onmouseup = () => { isDragging = false; };
@@ -497,37 +493,33 @@ function applyCrop(){
 }
 function closeCrop(){ cropModal.style.display = "none"; }
 
-/* --- DOWNLOAD LOGIC (A4 HD) --- */
+/* --- A4 HD DOWNLOAD --- */
 function downloadImage(){
-    // 1. Temporarily remove Scale & Restore original size
     const currentTransform = canvas.style.transform;
     canvas.style.transform = "none"; 
     window.scrollTo(0,0);
 
-    // 2. Capture
     html2canvas(document.getElementById("canvas"),{
-        scale: 3, // HD
+        scale: 3, 
         useCORS: true,
         allowTaint: true,
         backgroundColor:"#000",
-        width: 800,   // Internal Width
-        height: 1130, // Internal Height
-        windowWidth: 1280, // Trick it into thinking it's desktop
+        width: 800,
+        height: 1130,
+        windowWidth: 1280,
         scrollY: 0,
         x: 0,
         y: 0
     }).then(canvasEl=>{
-        // 3. Download
         const link=document.createElement("a");
         link.download="My_Anniversary_Collage.jpg";
         link.href=canvasEl.toDataURL("image/jpeg", 0.9);
         link.click();
         
-        // 4. Restore Phone View
         canvas.style.transform = currentTransform;
     }).catch(err => {
         console.error(err);
-        canvas.style.transform = currentTransform; // Restore even on error
+        canvas.style.transform = currentTransform;
     });
 }
 
