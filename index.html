@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Anniversary Collage</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Smart Anniversary Collage Mobile</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.cdnfonts.com/css/blackjack" rel="stylesheet">
@@ -18,6 +18,8 @@ color:#fff;
 display:flex;
 flex-direction:column;
 align-items:center;
+overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+padding-bottom: 50px;
 }
 
 .app{
@@ -26,14 +28,41 @@ gap:20px;
 padding:20px;
 flex-wrap:wrap;
 justify-content:center;
+width: 100%;
+box-sizing: border-box;
 }
 
+/* CONTROLS - Mobile Friendly */
 .controls{
 width:360px;
+max-width: 100%; /* Fit mobile screen */
 background:#1a1a1a;
 padding:20px;
 border-radius:12px;
 box-shadow:0 0 20px rgba(0,0,0,0.6);
+box-sizing: border-box;
+order: 2; /* On mobile, controls below canvas (optional, currently logic keeps side by side or wrap) */
+}
+
+@media (max-width: 850px) {
+    .app {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+    .controls {
+        width: 100%;
+        order: 2;
+    }
+    /* Canvas Wrapper for scaling */
+    #canvas-wrapper {
+        order: 1;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
 }
 
 input, textarea{
@@ -44,6 +73,7 @@ border-radius:6px;
 border:1px solid #444;
 background:#222;
 color:#fff;
+box-sizing: border-box;
 }
 
 button{
@@ -55,15 +85,24 @@ border-radius:8px;
 cursor:pointer;
 font-weight:bold;
 margin-bottom: 5px;
+font-size: 1rem;
 }
 
-/* CANVAS */
+/* CANVAS CONTAINER (To handle scaling on mobile) */
+#canvas-wrapper {
+    position: relative;
+    /* Height will be set via JS */
+}
+
+/* ACTUAL CANVAS */
 #canvas{
 width:800px;
 height:1130px;
 background:#000;
 position:relative;
 overflow:hidden;
+transform-origin: top center; /* Important for scaling */
+box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
 #bg-image{
@@ -76,7 +115,7 @@ z-index:0;
 pointer-events: none;
 }
 
-/* DATE - Fixed Pointer Events */
+/* DATE */
 #overlay-date-container{
 position:absolute;
 top:10%;
@@ -95,7 +134,7 @@ line-height:0.8;
 text-shadow:3px 3px 6px rgba(0,0,0,0.8);
 }
 
-/* PARAGRAPH - Fixed Pointer Events */
+/* PARAGRAPH */
 #overlay-para{
 position:absolute;
 top:29%;
@@ -109,7 +148,7 @@ z-index:6;
 pointer-events: none;
 }
 
-/* NAMES - Fixed Pointer Events */
+/* NAMES */
 #overlay-names{
 position:absolute;
 bottom:1%;
@@ -157,9 +196,10 @@ cursor:pointer;
 width: 100%;
 height: 100%;
 background: #222;
+-webkit-tap-highlight-color: transparent; /* Remove blue highlight on tap */
 }
 
-/* INNER DIV (MOVES/SCALES) */
+/* INNER DIV */
 .inner{
 position:absolute;
 top:0;
@@ -169,7 +209,7 @@ width: 100%;
 height: 100%;
 }
 
-/* IMAGE (RAW SIZE) */
+/* IMAGE */
 .inner img{
 display:block;
 max-width:none; 
@@ -192,14 +232,18 @@ flex-direction: column;
 justify-content:center;
 align-items:center;
 z-index:9999;
+padding: 20px;
 }
 
 .crop-wrapper{
 background:#1a1a1a;
-padding:20px;
+padding:15px;
 border-radius:12px;
 text-align: center;
 border: 1px solid #333;
+width: 100%;
+max-width: 400px; /* Limit width on tablets */
+box-sizing: border-box;
 }
 
 .crop-box{
@@ -209,14 +253,13 @@ background:#000;
 margin: 0 auto;
 border: 2px solid #555;
 cursor: grab;
-/* Dimensions set by JS */
+touch-action: none; /* Crucial for touch dragging */
 }
 
 .crop-box:active {
 cursor: grabbing;
 }
 
-/* FIXED: Transform Origin must match the Main Grid (Top Left) */
 .crop-inner{
 position:absolute;
 top:0;
@@ -234,8 +277,30 @@ top: 0;
 left: 0;
 }
 
+/* Zoom Controls for Mobile */
+.zoom-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 10px 0;
+}
+
+.zoom-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #333;
+    color: #fff;
+    font-size: 1.2rem;
+    border: 1px solid #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
 .crop-controls {
-margin-top: 15px;
+margin-top: 10px;
 display: flex;
 gap: 10px;
 justify-content: center;
@@ -243,17 +308,48 @@ justify-content: center;
 
 .crop-controls button {
 width: auto;
-padding: 8px 20px;
+flex: 1;
+padding: 10px;
 margin: 0;
 }
+
+/* Mobile Hint Text */
+.mobile-hint {
+    display: none;
+    font-size: 0.8rem;
+    color: #aaa;
+    margin-bottom: 10px;
+    text-align: center;
+}
+@media (max-width: 850px) {
+    .mobile-hint { display: block; }
+}
+
 </style>
 </head>
 
 <body>
 
 <h2>Smart Anniversary Collage</h2>
+<div class="mobile-hint">Tap to Select. Tap another to Swap.<br>Double Tap to Crop/Edit.</div>
 
 <div class="app">
+
+<div id="canvas-wrapper">
+    <div id="canvas">
+        <img id="bg-image">
+
+        <div id="overlay-date-container">
+            <div id="overlay-date" style="font-size:3rem;">14 Feb</div>
+            <div id="overlay-year" style="font-size:3rem;">2024</div>
+        </div>
+
+        <div id="area1"></div>
+        <div id="overlay-para"></div>
+        <div id="area2"></div>
+        <div id="overlay-names">Daivik❣️Radhika</div>
+    </div>
+</div>
 
 <div class="controls">
 
@@ -274,8 +370,8 @@ margin: 0;
 oninput="updateDateSize(this.value)">
 
 <label>Paragraph</label>
-<textarea id="input-msg">         Happy Anniversary 
-Today 💖 marks the beginning of  your years 💗 together 👩‍❤️‍👨✨. May your bond 💞 continue to grow stronger 💝 with each passing year 🌟🕊️. Here’s a small gift 🎁 to celebrate 🎉 the big Love 💕 you share 💫 may it bring a little extra joy 💓 to your special day! 🥂💐✨ Cheers to many more years of laughter, love 💖, and unforgettable memories together 🎊❤️</textarea>
+<textarea id="input-msg">         Happy Anniversary 
+Today 💖 marks the beginning of  your years 💗 together 👩‍❤️‍👨✨. May your bond 💞 continue to grow stronger 💝 with each passing year 🌟🕊️. Here’s a small gift 🎁 to celebrate 🎉 the big Love 💕 you share 💫 may it bring a little extra joy 💓 to your special day! 🥂💐✨ Cheers to many more years of laughter, love 💖, and unforgettable memories together 🎊❤️</textarea>
 
 <label>Name 1</label>
 <input type="text" id="input-name1" value="Daivik">
@@ -291,34 +387,22 @@ oninput="document.getElementById('overlay-names').style.fontSize=this.value+'rem
 
 </div>
 
-<div id="canvas">
-
-<img id="bg-image">
-
-<div id="overlay-date-container">
-<div id="overlay-date" style="font-size:3rem;">14 Feb</div>
-<div id="overlay-year" style="font-size:3rem;">2024</div>
-</div>
-
-<div id="area1"></div>
-
-<div id="overlay-para"></div>
-
-<div id="area2"></div>
-
-<div id="overlay-names">Daivik❣️Radhika</div>
-
-</div>
 </div>
 
 <div id="cropModal">
 <div class="crop-wrapper">
-<h3 style="margin-top:0; color:#ddd;">Adjust Photo (Drag & Scroll)</h3>
+<h3 style="margin-top:0; color:#ddd; font-size:1.2rem;">Adjust Photo</h3>
 <div class="crop-box" id="cropBox">
 <div class="crop-inner" id="cropInner">
 <img id="cropImg">
 </div>
 </div>
+
+<div class="zoom-controls">
+    <button class="zoom-btn" onclick="zoomOut()">-</button>
+    <button class="zoom-btn" onclick="zoomIn()">+</button>
+</div>
+
 <div class="crop-controls">
 <button onclick="applyCrop()" style="background:#28a745;">Apply</button>
 <button onclick="closeCrop()" style="background:#555;">Cancel</button>
@@ -333,6 +417,8 @@ const bgImage=document.getElementById("bg-image");
 const photoInput=document.getElementById("photo-input");
 const area1=document.getElementById("area1");
 const area2=document.getElementById("area2");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 /* CROP VARIABLES */
 const cropModal = document.getElementById("cropModal");
@@ -344,6 +430,29 @@ let cropState = {x:0, y:0, scale:1};
 
 let selected=null;
 let draggedItem=null;
+
+/* --- RESPONSIVE SCALING LOGIC --- */
+function scaleCanvas() {
+    const screenWidth = window.innerWidth;
+    const padding = 40; 
+    const targetWidth = 800;
+    
+    // Only scale if screen is smaller than canvas
+    if (screenWidth < targetWidth + padding) {
+        const scale = (screenWidth - padding) / targetWidth;
+        canvas.style.transform = `scale(${scale})`;
+        // Adjust height of wrapper so controls don't overlap
+        canvasWrapper.style.height = `${1130 * scale}px`;
+        canvasWrapper.style.width = `${800 * scale}px`; // Center align hack
+    } else {
+        canvas.style.transform = "none";
+        canvasWrapper.style.height = "auto";
+        canvasWrapper.style.width = "auto";
+    }
+}
+window.addEventListener("resize", scaleCanvas);
+// Call initially
+scaleCanvas();
 
 /* TEMPLATE */
 bgInput.addEventListener("change",e=>{
@@ -362,7 +471,7 @@ const scale = parseFloat(el.dataset.scale) || 1;
 el.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
 }
 
-/* REORDER & DRAG LOGIC */
+/* REORDER & DRAG LOGIC (Desktop) */
 function enableReorder(div){
 div.setAttribute("draggable","true");
 div.addEventListener("dragstart",()=>{ draggedItem = div; });
@@ -375,7 +484,7 @@ div.parentNode.insertBefore(draggedItem, div);
 });
 }
 
-/* --- ADVANCED CROP LOGIC --- */
+/* --- ADVANCED CROP LOGIC (MOBILE OPTIMIZED) --- */
 function openCrop(inner, div){
 currentInner = inner;
 
@@ -395,47 +504,75 @@ cropState.scale = parseFloat(inner.dataset.scale) || 1;
 updateCropView();
 cropModal.style.display = "flex";
 
-// 5. Mouse Drag Logic (Pan)
-let startX, startY, isDragging = false;
-
-cropBox.onmousedown = e => {
-e.preventDefault();
-isDragging = true;
-// Calculate relative to current state
-startX = e.clientX - cropState.x;
-startY = e.clientY - cropState.y;
-};
-
-document.onmousemove = e => {
-if(!isDragging) return;
-e.preventDefault();
-cropState.x = e.clientX - startX;
-cropState.y = e.clientY - startY;
-updateCropView();
-};
-
-document.onmouseup = () => {
-isDragging = false;
-};
-
-// 6. Wheel Logic (Zoom)
-cropBox.onwheel = e => {
-e.preventDefault();
-const zoomSpeed = 0.05; 
-if(e.deltaY < 0) {
-cropState.scale += zoomSpeed;
-} else {
-cropState.scale -= zoomSpeed;
-}
-// Prevent inverting image
-cropState.scale = Math.max(0.1, cropState.scale);
-updateCropView();
-};
+// 5. Setup Mouse & TOUCH Events for Panning
+setupCropInteraction();
 }
 
 function updateCropView(){
-// Apply transform to the inner div of the crop box
 cropInner.style.transform = `translate(${cropState.x}px, ${cropState.y}px) scale(${cropState.scale})`;
+}
+
+// Zoom Helper Functions (For Mobile Buttons)
+function zoomIn() {
+    cropState.scale += 0.1;
+    updateCropView();
+}
+function zoomOut() {
+    cropState.scale = Math.max(0.1, cropState.scale - 0.1);
+    updateCropView();
+}
+
+function setupCropInteraction() {
+    let startX, startY, isDragging = false;
+
+    // --- MOUSE EVENTS ---
+    cropBox.onmousedown = e => {
+        e.preventDefault();
+        isDragging = true;
+        startX = e.clientX - cropState.x;
+        startY = e.clientY - cropState.y;
+    };
+    document.onmousemove = e => {
+        if(!isDragging) return;
+        e.preventDefault();
+        cropState.x = e.clientX - startX;
+        cropState.y = e.clientY - startY;
+        updateCropView();
+    };
+    document.onmouseup = () => { isDragging = false; };
+
+    // --- TOUCH EVENTS (FOR MOBILE) ---
+    cropBox.ontouchstart = e => {
+        // e.preventDefault(); // allow scrolling if needed, but here we capture
+        isDragging = true;
+        const touch = e.touches[0];
+        startX = touch.clientX - cropState.x;
+        startY = touch.clientY - cropState.y;
+    };
+    
+    cropBox.ontouchmove = e => {
+        if(!isDragging) return;
+        e.preventDefault(); // Stop screen from scrolling while panning image
+        const touch = e.touches[0];
+        cropState.x = touch.clientX - startX;
+        cropState.y = touch.clientY - startY;
+        updateCropView();
+    };
+
+    cropBox.ontouchend = () => { isDragging = false; };
+
+    // --- WHEEL ZOOM (Desktop) ---
+    cropBox.onwheel = e => {
+        e.preventDefault();
+        const zoomSpeed = 0.05; 
+        if(e.deltaY < 0) {
+            cropState.scale += zoomSpeed;
+        } else {
+            cropState.scale -= zoomSpeed;
+        }
+        cropState.scale = Math.max(0.1, cropState.scale);
+        updateCropView();
+    };
 }
 
 function applyCrop(){
@@ -451,7 +588,10 @@ closeCrop();
 
 function closeCrop(){
 cropModal.style.display = "none";
-document.onmousemove = null; // Clean up
+document.onmousemove = null; 
+cropBox.onmousedown = null;
+cropBox.ontouchstart = null;
+cropBox.ontouchmove = null;
 }
 
 /* MAIN PHOTO LOADING LOGIC */
@@ -490,7 +630,6 @@ const imgH = img.naturalHeight;
 
 if(!boxW || !boxH || !imgW || !imgH) return;
 
-// Fill the box completely (Cover)
 const scale = Math.max(boxW/imgW, boxH/imgH);
 
 inner.dataset.scale = scale;
@@ -503,11 +642,16 @@ applyTransform(inner);
 
 enableReorder(div);
 
-/* CLICK TO SWAP */
+/* CLICK TO SWAP LOGIC */
 div.onclick=()=>{
 if(!selected){
 selected=div;
 div.classList.add("selected");
+}
+else if(selected === div){
+    // Deselect if clicked again
+    selected.classList.remove("selected");
+    selected = null;
 }
 else{
 // Swap Logic
@@ -535,9 +679,20 @@ selected=null;
 }
 };
 
-/* DOUBLE CLICK TO CROP */
+/* DOUBLE CLICK TO CROP (Works as Double Tap on mobile) */
+let lastTap = 0;
+div.addEventListener('touchend', function(e) {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
+    if (tapLength < 300 && tapLength > 0) {
+        e.preventDefault();
+        openCrop(inner, div);
+    }
+    lastTap = currentTime;
+});
+
 div.ondblclick = (e) => {
-e.stopPropagation(); // Stop bubbling
+e.stopPropagation(); 
 openCrop(inner, div);
 };
 
@@ -546,7 +701,11 @@ else area2.appendChild(div);
 };
 reader.readAsDataURL(file);
 });
-setTimeout(()=>applyLayout(files.length-1),100);
+setTimeout(()=>{
+    applyLayout(files.length-1);
+    // Recalculate layout size for scaling logic
+    scaleCanvas();
+}, 200);
 });
 
 /* LAYOUT ENGINE */
@@ -594,23 +753,34 @@ document.getElementById("input-name2").value;
 document.getElementById("input-name1").oninput=updateNames;
 document.getElementById("input-name2").oninput=updateNames;
 
-/* DOWNLOAD - UNTOUCHED & PERFECT */
+/* DOWNLOAD - Reset Scale for Clean Capture */
 function downloadImage(){
-html2canvas(document.getElementById("canvas"),{
-scale:2,
-useCORS:true,
-backgroundColor:"#000",
-width:800,
-height:1130
-}).then(canvas=>{
-const link=document.createElement("a");
-link.download="collage.jpg";
-link.href=canvas.toDataURL("image/jpg");
-link.click();
-});
+    // Temporarily remove scale to ensure full HD capture
+    const currentTransform = canvas.style.transform;
+    canvas.style.transform = "none";
+    window.scrollTo(0,0);
+
+    html2canvas(document.getElementById("canvas"),{
+        scale:2,
+        useCORS:true,
+        backgroundColor:"#000",
+        width:800,
+        height:1130,
+        scrollY: 0,
+    }).then(canvasEl=>{
+        const link=document.createElement("a");
+        link.download="anniversary_collage.jpg";
+        link.href=canvasEl.toDataURL("image/jpeg", 0.9);
+        link.click();
+        
+        // Restore scale for UI
+        canvas.style.transform = currentTransform;
+    }).catch(err => {
+        console.error(err);
+        canvas.style.transform = currentTransform;
+    });
 }
 
 </script>
 </body>
-
 </html>
