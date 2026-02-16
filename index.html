@@ -70,6 +70,7 @@ body{
 #overlay-date, #overlay-year{
     font-family:'BlackJack',cursive; color:#fff; line-height:0.8; text-shadow:3px 3px 6px rgba(0,0,0,0.8);
     font-weight: bold;
+    line-height: 1.1;
 }
 
 /* PARAGRAPH (Tumhari Settings: Top 29%, Left 2%, Width 36%) */
@@ -85,9 +86,9 @@ body{
     z-index:6;
     pointer-events: none;
     font-weight: 900 !important;
-    -webkit-text-stroke: 0.5px white;
+    -webkit-text-stroke: 0.5px white; /* Isse font thick ho jayega */
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 
 /* NAMES (Tumhari Settings: Bottom 1%, Left 32%) */
@@ -200,14 +201,14 @@ button{
             <img id="bg-image">
 
             <div id="overlay-date-container">
-                <div id="overlay-date" style="font-size:3rem;">14 Feb</div>
-                <div id="overlay-year" style="font-size:3rem;">2024</div>
+                <div id="overlay-date" style="font-size:3rem;"> </div>
+                <div id="overlay-year" style="font-size:3rem;"> </div>
             </div>
 
             <div id="area1"></div>
             <div id="overlay-para"></div>
             <div id="area2"></div>
-            <div id="overlay-names">Daivik❣️Radhika</div>
+            <div id="overlay-names"> ❣️ </div>
         </div>
     </div>
 
@@ -222,10 +223,10 @@ button{
         <input type="file" id="photo-input" multiple accept="image/*">
 
         <label>Date</label>
-        <input type="text" id="input-date" value="14 Feb">
+        <input type="text" id="input-date" value=" ">
 
         <label>Year</label>
-        <input type="text" id="input-year" value="2024">
+        <input type="text" id="input-year" value=" ">
 
         <label>Date Size</label>
         <input type="range" min="2" max="4" step="0.1" value="3"
@@ -233,13 +234,13 @@ button{
 
         <label>Paragraph</label>
         <textarea id="input-msg" rows="5">         Happy Anniversary 
-Today 💖 marks the beginning of your years 💗 together👩‍❤️‍👨✨ . May your bond 💞 continue to grow stronger with each passing year 🕊️. Here’s a small gift 🎁 to celebrate 🎉 the big Love 💕 you share 💫 may it bring a little extra joy to your special day!🥂✨ Cheers to many more years of laughter, love, and unforgettable memories together 🎊❤️</textarea>
+Today 💖 marks the beginning of your years 💗 together👩‍❤️‍👨. May your bond 💞 continue to grow stronger with each passing year 🕊️. Here’s a small gift 🎁 to celebrate 🎉 the big Love 💕 you share 💫 may it bring a little extra joy to your special day!🥂✨ Cheers to many more years of laughter, love, and unforgettable memories together 🎊❤️</textarea>
 
         <label>Name 1</label>
-        <input type="text" id="input-name1" value="Daivik">
+        <input type="text" id="input-name1" value=" ">
 
         <label>Name 2</label>
-        <input type="text" id="input-name2" value="Radhika">
+        <input type="text" id="input-name2" value=" ">
 
         <label>Name Size</label>
         <input type="range" min="2" max="6" step="0.1" value="3.8"
@@ -531,6 +532,5 @@ function downloadImage(){
 
 </script>
 </body>
-
 
 </html>
